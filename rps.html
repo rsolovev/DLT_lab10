@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Web 3 Demo</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <!--    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.0/web3.min.js"
+            integrity="sha512-ppuvbiAokEJLjOUQ24YmpP7tTaLRgzliuldPRZ01ul6MhRC+B8LzcVkXmUsDee7ne9chUfApa9/pWrIZ3rwTFQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+<h1>lab 10 knb</h1>
+<br>
+<br>
+<label for="name">
+    <div>Name</div>
+    <input id="name" type="text" class="num-b">
+</label>
+<label for="choice">
+    <div>Choice</div>
+    <input id="choice" type="text" class="num-b">
+</label>
+<label for="playerNum">
+    <div>Choicer Number</div>
+    <input id="playerNum" type="number" class="num-b">
+</label>
+<button id="div" onclick="play(document.getElementById('choice').value, document.getElementById('playerNum').value);"
+        class="div">Play
+</button>
+<button id="res" onclick="printResult()"
+        class="div">Get results
+</button>
+<script type="text/javascript">
+
+    async function loadWeb3() {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
+        }
+    }
+
+
+    async function loadContract() {
+        return new window.web3.eth.Contract([
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "player2Choice",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "choice",
+                        "type": "string"
+                    }
+                ],
+                "name": "Choicer1",
+                "outputs": [],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [],
+                "name": "play",
+                "outputs": [
+                    {
+                        "name": "w",
+                        "type": "int256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "player1Choice",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "winn",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "int256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "choice",
+                        "type": "string"
+                    }
+                ],
+                "name": "Choicer2",
+                "outputs": [],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            }
+        ], "0x4CC282D4953ef7d68ac2c7a705e52436b72FE528");
+    }
+
+    async function printResult() {
+        const winn = await window.contract.methods.play().call();
+        alert(winn)
+        console.log(winn)
+        return winn
+    }
+
+    async function getCurrentAccount() {
+        const accounts = await window.web3.eth.getAccounts();
+        console.log(accounts[0])
+        return accounts[0];
+    }
+
+    async function load() {
+        await loadWeb3();
+        window.contract = await loadContract();
+    }
+
+    async function play(choice, playerNum) {
+        const account = await getCurrentAccount();
+
+        if (playerNum === "1") {
+            await window.contract.methods['Choicer1'](choice)
+                .send({from: account, value: 1000000000000000000}); // 1eth
+        } else {
+            await window.contract.methods['Choicer2'](choice)
+                .send({from: account, value: 1000000000000000000}); //1 eth
+        }
+    }
+
+
+    load();
+</script>
+</body>
+
+</html>
