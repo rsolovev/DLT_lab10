@@ -25,3 +25,5 @@
 ![](https://i.imgur.com/7lpPxYi.png)
 
 #### And see that winner is Choicer2
+
+Backup video: https://drive.google.com/file/d/1riMPRphT8uZ-T84TjxP5RT1U7Ht5hGPa/view?usp=sharing
